@@ -1,6 +1,7 @@
 
 import { useState, useRef } from 'react';
 import { Database } from 'lucide-react';
+import VoiceRecognition from './VoiceRecognition';
 
 interface AISearchProps {
   onSearch: (query: string) => void;
@@ -42,6 +43,10 @@ const AISearch = ({ onSearch }: AISearchProps) => {
     }
   };
   
+  const handleVoiceResult = (transcript: string) => {
+    setAiQuery(transcript);
+  };
+  
   return (
     <div className="w-full max-w-3xl mx-auto mt-8">
       <div className={`
@@ -76,15 +81,24 @@ const AISearch = ({ onSearch }: AISearchProps) => {
         {isExpanded && (
           <div className="px-4 pb-4 animate-fade-in">
             <form onSubmit={handleSubmit}>
-              <textarea
-                ref={textareaRef}
-                value={aiQuery}
-                onChange={(e) => setAiQuery(e.target.value)}
-                placeholder="اكتب سؤالك أو موضوع البحث هنا..."
-                className="w-full p-3 bg-white/50 border border-emerald-100 rounded-lg text-right placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50 transition"
-                rows={3}
-                dir="rtl"
-              ></textarea>
+              <div className="relative">
+                <textarea
+                  ref={textareaRef}
+                  value={aiQuery}
+                  onChange={(e) => setAiQuery(e.target.value)}
+                  placeholder="اكتب سؤالك أو موضوع البحث هنا..."
+                  className="w-full p-3 bg-white/50 border border-emerald-100 rounded-lg text-right placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50 transition"
+                  rows={3}
+                  dir="rtl"
+                ></textarea>
+                
+                <div className="absolute left-3 bottom-3">
+                  <VoiceRecognition 
+                    onResult={handleVoiceResult}
+                    buttonClassName="p-2 rounded-full hover:bg-emerald-50 transition-colors duration-200"
+                  />
+                </div>
+              </div>
               
               <div className="flex justify-end mt-3">
                 <button

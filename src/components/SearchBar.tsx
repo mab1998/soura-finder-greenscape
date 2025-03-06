@@ -1,6 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import VoiceRecognition from './VoiceRecognition';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -63,6 +64,12 @@ const SearchBar = ({ onSearch, suggestions = [] }: SearchBarProps) => {
     setShowSuggestions(false);
   };
 
+  const handleVoiceResult = (transcript: string) => {
+    setQuery(transcript);
+    // أيضًا قم بالبحث مباشرة بعد التعرف الصوتي
+    onSearch(transcript);
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto relative" ref={searchRef}>
       <div 
@@ -83,6 +90,12 @@ const SearchBar = ({ onSearch, suggestions = [] }: SearchBarProps) => {
           dir="rtl"
           className="flex-1 bg-transparent py-4 px-5 text-lg outline-none placeholder:text-sage-500 text-right"
         />
+        
+        <VoiceRecognition 
+          onResult={handleVoiceResult}
+          buttonClassName="ml-0 mr-2 p-2 rounded-full hover:bg-emerald-50 transition-colors duration-200"
+        />
+        
         <button
           onClick={handleSearch}
           className="ml-2 mr-3 p-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors duration-200"
